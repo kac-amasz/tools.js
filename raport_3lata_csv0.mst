@@ -1,0 +1,3 @@
+NrKatalogowy;{{date}};{{#dates}}>{{.}};{{/dates}}
+{{#rows}}{{NrKatalogowy}};{{Stan}};{{#Rozchody}}{{.}};{{/Rozchody}}
+{{/rows}}

@@ -1,0 +1,31 @@
+{
+  "name": "amasz-tools",
+  "version": "0.0.0",
+  "description": "amasz-tools",
+  "main": "common.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kac-amasz/tools.js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kac-amasz/tools.js/issues"
+  },
+  "dependencies": {
+    "async": "^1.5.0",
+    "aws-sdk": "^2.2.18",
+    "fstream": "^1.0.8",
+    "ftp": "^0.3.10",
+    "jsonfile": "^2.2.3",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.10.6",
+    "mssql": "^2.3.2",
+    "mustache": "^2.2.0",
+    "nodemailer": "^1.10.0",
+    "tar": "^2.2.1"
+  }
+}
