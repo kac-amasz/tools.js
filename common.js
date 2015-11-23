@@ -38,8 +38,10 @@ module.exports = {
     });
 
     var mailOptions = {
-      from: 'agro-raporty ✔ <' + conf.mail.from + '>',
+      from: conf.mail.from,
       to: conf.mail.to,
+      cc: conf.mail.cc,
+      bcc: conf.mail.bcc,
       subject: subject,
       text: msg,
       attachments: attachments,
