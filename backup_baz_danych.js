@@ -179,13 +179,16 @@ function encrypt(ctx, callback) {
 
 function uploadZip(ctx, callback) {
   var conf = ctx.conf
-  AWS.config.accessKeyId = conf.aws.access_key_id
-  AWS.config.secretAccessKey = conf.aws.secret_access_key
-  AWS.config.sslEnabled = false
+  var awsConfig = {
+      accessKeyId: conf.aws.access_key_id,
+      secretAccessKey: conf.aws.secret_access_key,
+      sslEnabled: true,
+      region: conf.aws.s3.region,
+      httpOptions: {
+        timeout: 60 * 1000 * 10
+      }
+    }
     //AWS.S3.ManagedUpload.minPartSize = 15 * 1024 * 1024
-  var s3 = new AWS.S3({
-    region: conf.aws.s3.region
-  })
 
   var params = {
     Bucket: conf.aws.s3.bucket,
@@ -198,7 +201,8 @@ function uploadZip(ctx, callback) {
   var upload = new AWS.S3.ManagedUpload({
     params: params,
     queueSize: 3,
-    //minPartSize: 15 * 1000 * 1000
+    partSize: 10 * 1000 * 1000
+    service: new AWS.S3(awsConfig),
   });
   var uploadedPercent = -1
   upload.on('httpUploadProgress', function(evt) {
