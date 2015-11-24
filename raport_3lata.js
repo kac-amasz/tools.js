@@ -11,8 +11,6 @@ var path = require('path')
 var util = require('util')
 var async = require('async')
 var common = require('./common')
-var conf = process.argv.length > 2 ? require(process.argv[2]) : require('./raport_3lata_config')
-
 
 function formatQuery(date, warehouseId) {
   return Mustache.render(m_q1, {
@@ -139,8 +137,7 @@ function processBalances(ctx, callback) {
 }
 
 function renderRows(ctx, callback) {
-  //var outFile = path.join(ctx.conf.reports.directory, ctx.created + '_3lata.csv')
-  var outFile = ctx.created + '_3lata.txt'
+  var outFile = path.join(ctx.conf.reports.directory, ctx.created + '_3lata.txt')
   fs.readFile(path.join(__dirname, 'raport_3lata_csv0.mst'), 'utf8', function(err, tpl) {
     if (err) {
       if (callback) callback(err, ctx)
@@ -154,7 +151,7 @@ function renderRows(ctx, callback) {
     }), function(err) {
       if (!err) {
         ctx.outFile = outFile
-        ctx.outFileContentType = 'text/html; charset=UTF-8'
+        ctx.outFileContentType = 'text/plain; charset=UTF-8'
       }
       if (callback) callback(err, ctx)
     })
@@ -164,34 +161,45 @@ function renderRows(ctx, callback) {
 
 
 function storeError(ctx, err, callback) {
-  var outFile = ctx.created + '_3lata-ERROR.txt'
+  var outFile = path.join(ctx.conf.reports.directory, ctx.created + '_3lata-ERROR.txt')
   fs.writeFile(outFile, err.stack + '\n' + util.inspect(ctx), 'utf8', function(err) {
     if (callback) callback(err, ctx)
   })
 }
 
-
-conf.backup.db.database = conf.reports.database
-var ctx = {
-  conf: conf,
-  warehouseName: conf.reports.warehouseName,
-  //date: '2015-10-01',
-  date: moment().format('YYYY-MM-DD'),
-  testMode: false,
-  created: moment().format('YYYY-MM-DD_HH-mm-ss'),
-}
-
-async.waterfall([
-  common.initConnection(conf.backup.db, ctx),
-  common.getWarehouseId, getBalances,
-  //saveRecordsets,
-  processBalances, renderRows
-], function(err, ctx) {
-  if (err) {
-    console.log(err, ctx)
-    return storeError(ctx, err, function() {
-      setTimeout(process.exit, 500)
-    })
+if (!module.parent) {
+  var conf = process.argv.length > 2 ? require(process.argv[2]) : require('./raport_3lata_config')
+  conf.reports.directory = '.'
+  conf.backup.db.database = conf.reports.database
+  var ctx = {
+    conf: conf,
+    warehouseName: conf.reports.warehouseName,
+    //date: '2015-10-01',
+    date: moment().format('YYYY-MM-DD'),
+    testMode: false,
+    created: moment().format('YYYY-MM-DD_HH-mm-ss'),
   }
-  process.exit()
-})
+
+  async.waterfall([
+    common.initConnection(conf.backup.db, ctx),
+    common.getWarehouseId, getBalances,
+    //saveRecordsets,
+    processBalances, renderRows
+  ], function(err, ctx) {
+    if (err) {
+      console.log(err, ctx)
+      return storeError(ctx, err, function() {
+        setTimeout(process.exit, 500)
+      })
+    } else {
+      process.exit()
+    }
+  })
+} else {
+  module.exports = {
+    getBalances: getBalances,
+    processBalances: processBalances,
+    renderRows: renderRows,
+    storeError: storeError,
+  }
+}

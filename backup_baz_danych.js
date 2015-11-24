@@ -272,8 +272,11 @@ async.waterfall([
 ], function(err, ctx) {
   console.log(err, ctx)
     //if (err) return reportFailure(ctx, err, process.exit)
-  if (err) return storeError(ctx, err, function() {
-    reportFailure(ctx, err, process.exit)
-  })
-  process.exit()
+  if (err) {
+    return storeError(ctx, err, function() {
+      reportFailure(ctx, err, process.exit)
+    })
+  } else {
+    process.exit()
+  }
 })
