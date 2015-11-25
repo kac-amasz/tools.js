@@ -201,7 +201,7 @@ function uploadZip(ctx, callback) {
   var upload = new AWS.S3.ManagedUpload({
     params: params,
     queueSize: 3,
-    partSize: 10 * 1000 * 1000
+    partSize: 10 * 1000 * 1000,
     service: new AWS.S3(awsConfig),
   });
   var uploadedPercent = -1
