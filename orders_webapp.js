@@ -21,9 +21,9 @@ function zeroFill(v, n) {
 
 app.set('port', process.env.PORT || 3000)
 app.set('view engine', 'jade')
-app.set('views', './views')
-app.use(express.static(__dirname + '/public'));
-//app.use('/static', express.static(__dirname + '/public'));
+app.set('views', path.join(__dirname, 'views'))
+app.use(express.static(__dirname + '/public'))
+  //app.use('/static', express.static(__dirname + '/public'));
 app.use(logger('dev'))
 app.use(bodyParser.json()) //parses json, multi-part (file), url-encoded
 
