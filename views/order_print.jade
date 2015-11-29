@@ -1,0 +1,39 @@
+doctype html
+html
+  head
+    title!= title
+    meta(charset='UTF-8')
+    style.
+      table, th, td {
+        border: 1px dashed black;
+        border-collapse: collapse;
+        padding: 0.2em;
+      }
+  body
+    table
+      thead
+        tr
+          th Nr. katalogowy
+          th Nazwa
+          th Cena
+          th Sztuk
+          th Wartość
+      tbody
+        each rec in records
+          tr
+            td!= rec.id
+            td!= rec.name
+            td!= rec.price
+            td!= rec.count
+            td!= rec.value
+        tr
+          td(colspan='3')
+          td Suma
+          td!= value
+        tr
+          td(colspan='3')
+          td Brutto
+          td!= valueGross
+
+    if useReload
+      script(src='/reload/reload.js')

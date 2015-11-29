@@ -18,14 +18,21 @@
   "dependencies": {
     "async": "^1.5.0",
     "aws-sdk": "^2.2.18",
+    "body-parser": "^1.14.1",
+    "csv": "^0.4.6",
+    "express": "^4.13.3",
     "fstream": "^1.0.8",
     "ftp": "^0.3.10",
+    "jade": "^1.11.0",
     "jsonfile": "^2.2.3",
+    "level": "^1.4.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.10.6",
+    "morgan": "^1.6.1",
     "mssql": "^2.3.2",
     "mustache": "^2.2.0",
     "nodemailer": "^1.10.0",
+    "reload": "^0.7.0",
     "tar": "^2.2.1"
   }
 }

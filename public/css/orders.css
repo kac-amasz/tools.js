@@ -1,0 +1,88 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
+}
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading, .form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.part_count {
+  display: inline-block;
+  width: 10em;
+}
+.price_sel_main {
+  display: inline-block;
+  vertical-align: top;
+}
+.part_shippings {
+  width: 21em;
+}
+.part_shippings button {
+  width: 6em;
+}
+.part_name {
+  width: 20em;
+}
+.part_id {
+  width: 10em;
+}
+.part_sum {
+  width: 10em;
+  text-align: right;
+}
+#search_text {
+  max-width: 8em;
+}
+#basket_comments {
+  width: 100%;
+  height: 7em;
+}
+td {
+  //border: thin solid black;
+}
+#total_value {}
+.container {
+  margin-top: 2em;
+}
+
+/* fix bootstrap lines */
+
+.table > tbody > tr > td {
+  border-top: 0 none
+}
+.table > tbody > tr {
+  border-top: 3px dashed #ddd
+}
+.part_row .slider.slider-horizontal {
+  width: 14em
+}

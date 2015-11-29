@@ -1,0 +1,87 @@
+doctype html
+html
+  head
+    title!= title
+    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', rel='stylesheet')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-touchspin/3.0.3/jquery.bootstrap-touchspin.css', rel='stylesheet')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/css/bootstrap-notify.min.css', rel='stylesheet')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/5.2.5/css/bootstrap-slider.min.css', rel='stylesheet')
+    link(href='css/orders.css', rel='stylesheet')
+  body
+    .container
+      #dashboard
+        nav(class='navbar navbar-default navbar-fixed-top', role='navigation')
+          .container-fluid
+            .navbar-header
+              a.navbar-brand(href='/')!= title
+            #bs-example-navbar-collapse-1.collapse.navbar-collapse
+              ul.nav.navbar-nav
+                li
+
+              form.navbar-form.navbar-left(role='search', action='#')
+                div.form-group
+                  button#order_save_button.btn.btn-default(type='button') zapisz
+                  input#search_text.form-control(type='text',placeholder='np. 220')
+                  button#search_commit.btn.btn-default dodaj
+                  button#order_print_button.btn.btn-default drukuj
+                span#search_error.alert.alert-danger(role='alert', style='display: none') błąd
+      .notifications.top-left
+      #parts_panel.parts_panel.panel.panel-warning(style='display: none')
+        .panel-heading
+          input.order_name(type='text', value='Roman Ryciński')
+          span.label.label-default.pull-right(style='font-size: 1.2em;')
+            | razem <span class='rows_total_value'>0</span> zł
+            | (<span class='rows_total_value_gross'>0</span>)
+        .panel-body
+          table#sample_table.table(style='display: none')
+            tbody
+              tr
+                td.part_count
+                  input.part_count_input(type='text', value='1')
+
+                td.part_id 0000000220
+                td.part_name PODKŁADKA
+                td
+                  div
+                    span.label.label-primary.price_min.pull-left 10.21
+                    span.label.label-success.price_max.pull-right 21.40
+                  input.part_price_slider(data-slider-min='10.21', data-slider-max='21.40', data-slider-step='0.1')
+                td.part_sum
+                  | <span>20.31</span> zł</span>
+                td
+                  button.btn.btn-danger(type='button') X
+
+          table.table.parts_table
+            tbody
+
+      #orders_panel.orders_panel.panel.panel-info
+        .panel-heading
+          span najnowsze
+        .panel-body
+          table.table
+            thead
+              tr
+                th nazwa
+                th zapisany
+            tbody
+          button.btn.btn-info.center-block.orders_add_button(type='button') więcej
+
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-touchspin/3.0.3/jquery.bootstrap-touchspin.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/js/bootstrap-notify.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/5.2.5/bootstrap-slider.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/pl.js')
+    script(src='js/orders.js')
+    script.
+      $(document).ready(function() {
+        //getPart('7711132503', function(err, data){ if(err) throw err; addRow($('#parts_panel'), {part: data.value, count: 5, price: 6541.21}) })
+        //var order = JSON.parse('{"records":[{"part":{"id":"0000085430","name":"PIERŚCIEŃ","priceMax":13.56,"priceMin":9.9},"count":"5","price":13.56},{"part":{"id":"0000000052","name":"WSPORNIK","priceMax":352.41,"priceMin":257.26},"count":"4","price":352.41},{"part":{"id":"0000000220","name":"PODKŁADKA","priceMax":8.06,"priceMin":5.88},"count":"1","price":8.06},{"part":{"id":"7711132503","name":"ZESTAW ROZDZIELACZA POMOCNICZEGO","priceMax":7684.62,"priceMin":6147.7},"count":5,"price":6541.21}],"name":"Nowy 15/11/27 13:55","created":"2015-11-27T13:55:08.126"}')
+        var order = JSON.parse('{"records":[{"part":{"id":"0000085430","name":"PIERŚCIEŃ","priceMax":13.56,"priceMin":9.9},"count":"5","price":11.3},{"part":{"id":"0000000052","name":"WSPORNIK","priceMax":352.41,"priceMin":257.26},"count":"4","price":352.41},{"part":{"id":"0000000220","name":"PODKŁADKA","priceMax":8.06,"priceMin":5.88},"count":"1","price":8.06},{"part":{"id":"7711132503","name":"ZESTAW ROZDZIELACZA POMOCNICZEGO","priceMax":7684.62,"priceMin":6147.7},"count":5,"price":6541.21}],"name":"Nowy 15/11/27 13:55","created":"2015-11-27T13:55:08.126","updated":"2015-11-27T19:00:52.198","saved":"2015-11-27T19:00:52.198"}')
+        //loadOrder($('#parts_panel'), order)
+        addOrders({})
+      })
+
+    if useReload
+      script(src='/reload/reload.js')
