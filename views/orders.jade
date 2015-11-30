@@ -76,10 +76,6 @@ html
     script(src='js/orders.js')
     script.
       $(document).ready(function() {
-        //getPart('7711132503', function(err, data){ if(err) throw err; addRow($('#parts_panel'), {part: data.value, count: 5, price: 6541.21}) })
-        //var order = JSON.parse('{"records":[{"part":{"id":"0000085430","name":"PIERŚCIEŃ","priceMax":13.56,"priceMin":9.9},"count":"5","price":13.56},{"part":{"id":"0000000052","name":"WSPORNIK","priceMax":352.41,"priceMin":257.26},"count":"4","price":352.41},{"part":{"id":"0000000220","name":"PODKŁADKA","priceMax":8.06,"priceMin":5.88},"count":"1","price":8.06},{"part":{"id":"7711132503","name":"ZESTAW ROZDZIELACZA POMOCNICZEGO","priceMax":7684.62,"priceMin":6147.7},"count":5,"price":6541.21}],"name":"Nowy 15/11/27 13:55","created":"2015-11-27T13:55:08.126"}')
-        var order = JSON.parse('{"records":[{"part":{"id":"0000085430","name":"PIERŚCIEŃ","priceMax":13.56,"priceMin":9.9},"count":"5","price":11.3},{"part":{"id":"0000000052","name":"WSPORNIK","priceMax":352.41,"priceMin":257.26},"count":"4","price":352.41},{"part":{"id":"0000000220","name":"PODKŁADKA","priceMax":8.06,"priceMin":5.88},"count":"1","price":8.06},{"part":{"id":"7711132503","name":"ZESTAW ROZDZIELACZA POMOCNICZEGO","priceMax":7684.62,"priceMin":6147.7},"count":5,"price":6541.21}],"name":"Nowy 15/11/27 13:55","created":"2015-11-27T13:55:08.126","updated":"2015-11-27T19:00:52.198","saved":"2015-11-27T19:00:52.198"}')
-        //loadOrder($('#parts_panel'), order)
         addOrders({})
       })
 
