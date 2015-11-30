@@ -251,7 +251,8 @@ $(document).ready(function() {
       $(evt.target).data('updated', moment.utc().format(TS_FMT))
       $('#order_save_button').removeClass('btn-default').addClass('btn-warning')
     }
-    $('#search_text').focus() // focus out to change color of 'save'
+    //$('#search_text').focus() // focus out to change color of 'save'
+    //$('#order_print_button').focus() // focus out to change color of 'save'
   })
 
   $('#search_commit').on('click', function(evt) {
@@ -284,7 +285,7 @@ $(document).ready(function() {
       $(this).data('order_name', val)
       if (n != val) $(this).trigger('total_change')
     })
-  }).on('focus', function(evt) {
+  }).on('click', function(evt) {
     $(evt.target).select()
   })
 
@@ -308,7 +309,9 @@ $(document).ready(function() {
             //console.log('resp', data)
           $('#parts_panel').data('saved', order.saved)
           $('#order_save_button').removeClass('btn-warning').addClass('btn-default')
-          $('#search_text').focus() // focus out to change color of 'save'
+          //$('#search_text').focus() // focus out to change color of 'save'
+          //$('#order_save_button').focus()
+          $(evt.target).blur()
         },
         error: function(req, status, errMsg) {
           showError(errMsg)

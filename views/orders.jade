@@ -7,24 +7,23 @@ html
     link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/css/bootstrap-notify.min.css', rel='stylesheet')
     link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/5.2.5/css/bootstrap-slider.min.css', rel='stylesheet')
     link(href='css/orders.css', rel='stylesheet')
+    link(rel='icon', href='img/favicon.png')
   body
     .container
       #dashboard
-        nav(class='navbar navbar-default navbar-fixed-top', role='navigation')
+        nav(class='navbar navbar-default')
           .container-fluid
             .navbar-header
               a.navbar-brand(href='/')!= title
-            #bs-example-navbar-collapse-1.collapse.navbar-collapse
-              ul.nav.navbar-nav
-                li
-
-              form.navbar-form.navbar-left(role='search', action='#')
-                div.form-group
-                  button#order_save_button.btn.btn-default(type='button') zapisz
+            ul.nav.navbar-nav
+              li
+                button#order_save_button.btn.btn-default.navbar-btn(type='button') zapisz
+              li
+                form.navbar-form(role='search')
                   input#search_text.form-control(type='text',placeholder='np. 220')
                   button#search_commit.btn.btn-default dodaj
-                  button#order_print_button.btn.btn-default drukuj
-                span#search_error.alert.alert-danger(role='alert', style='display: none') błąd
+            .navbar-right
+              button#order_print_button.btn.btn-default.navbar-btn drukuj
       .notifications.top-left
       #parts_panel.parts_panel.panel.panel-warning(style='display: none')
         .panel-heading
