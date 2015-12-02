@@ -61,10 +61,15 @@ function createRow(data) {
     .slider()
   $(tr).on('total_change', function(evt) {
     evt.stopPropagation()
-    var v = $(evt.target).data('count') * $(evt.target).data('price')
+    var part = $(evt.target).data('part')
+    var price = $(evt.target).data('price')
+    var v = $(evt.target).data('count') * price
     v = Math.round(v * 100) / 100
     $(evt.target).data('total_value', v)
     $(evt.target).find('.part_sum').text(formatCurrency(v * 100))
+    var ratio = Math.round((price - part.priceMin) * 100 / part.priceMin) + '/' +
+      Math.round((part.priceMax - price) * 100 / part.priceMax)
+    $(evt.target).find('.price_ratio').text(ratio)
     $($(evt.target).parents('.parts_panel')[0]).trigger('total_change') //call parts_panel
   })
   $(tr).find(".btn-danger").on("click", function(evt) {
@@ -258,7 +263,7 @@ $(document).ready(function() {
   $('#search_commit').on('click', function(evt) {
     evt.preventDefault()
       //if (!$('#parts_panel').is(':visible')) return false
-    var id = $('#search_text').val().trim()
+    var id = $('#search_text').val().replace(/\s/g, '')
     if (id.length == 0) return
     getPart(id, function(err, data) {
       if (!err) err = data.err
@@ -309,8 +314,8 @@ $(document).ready(function() {
             //console.log('resp', data)
           $('#parts_panel').data('saved', order.saved)
           $('#order_save_button').removeClass('btn-warning').addClass('btn-default')
-          //$('#search_text').focus() // focus out to change color of 'save'
-          //$('#order_save_button').focus()
+            //$('#search_text').focus() // focus out to change color of 'save'
+            //$('#order_save_button').focus()
           $(evt.target).blur()
         },
         error: function(req, status, errMsg) {

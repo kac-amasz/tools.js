@@ -83,6 +83,12 @@ td {
 .table > tbody > tr {
   border-top: 3px dashed #ddd
 }
-.part_row .slider.slider-horizontal {
+
+/*.part_row .slider.slider-horizontal {*/
+
+.part_row .part_price {
   width: 14em
+}
+.part_row .price_ratio {
+  width: 5em
 }
