@@ -246,7 +246,7 @@ function exportOrder(req, res, data) {
     r = data.records[r]
     var tax = Math.round(r.price * taxRate) / 100
     records.push({
-      number: idx+1,
+      number: idx + 1,
       id: r.part.id,
       name: r.part.name,
       count: sprintf.sprintf('%.2f', r.count),
@@ -298,8 +298,8 @@ app.post('/order/export', function(req, res) {
   exportOrder(req, res, req.body)
 })
 
-app.post('/order/export2', function(req, res){
-  res.set('Content-disposition', 'attachment; filename='+req.body.fileName)
+app.post('/order/export2', function(req, res) {
+  res.set('Content-disposition', 'attachment; filename=' + req.body.fileName)
   var order = JSON.parse(req.body.order)
   exportOrder(req, res, order)
 })
@@ -325,17 +325,25 @@ app.get('/part/find/:id', function(req, res) {
     })
 })
 
-
-
 var server = http.createServer(app)
-
-
 if (conf.useReload) {
   //reload code here
   //optional reload delay and wait argument can be given to reload, refer to [API](https://github.com/jprichardson/reload#api) below
   //reload(server, app)// [reloadDelay], [wait])
   reload(server, app, 200, true)
 }
+var io = require('socket.io')(server)
+io.on('connection', function(socket) {
+  //console.log('a user connected')
+  socket.on('disconnect', function() {
+    //console.log('user disconnected');
+  })
+  socket.on('clipboard copy', function(msg) {
+    console.log('message: ' + msg);
+    io.emit('clipboard copy', msg)
+  })
+
+})
 
 server.listen(app.get('port'), function() {
   console.log("Web server listening on port " + app.get('port'));

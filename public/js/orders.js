@@ -380,4 +380,13 @@ $(document).ready(function() {
       }
     }
   })
+
+  io().on('clipboard copy', function(msg) {
+    console.log(msg)
+    $('#search_text').val(msg)
+    $('#search_commit').click()
+    setTimeout(function() {
+      $('#order_save_button').click()
+    }, 500)
+  })
 })
