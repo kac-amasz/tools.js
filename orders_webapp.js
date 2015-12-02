@@ -4,7 +4,8 @@ var express = require('express'),
   reload = require('reload'),
   bodyParser = require('body-parser'),
   logger = require('morgan'),
-  levelup = require('level')
+  levelup = require('level'),
+  sprintf = require('sprintf-js')
 
 var conf = require('./env.json')[process.env.NODE_ENV || 'prod']
 console.log(conf)
@@ -26,6 +27,7 @@ app.use(express.static(__dirname + '/public'))
   //app.use('/static', express.static(__dirname + '/public'));
 app.use(logger('dev'))
 app.use(bodyParser.json()) //parses json, multi-part (file), url-encoded
+app.use(bodyParser.urlencoded())
 
 
 
@@ -236,18 +238,70 @@ function printOrder(req, res, data) {
   })
 }
 
+function exportOrder(req, res, data) {
+  var records = []
+  var taxRate = 23
+  for (var r in data.records) {
+    var idx = parseInt(r)
+    r = data.records[r]
+    var tax = Math.round(r.price * taxRate) / 100
+    records.push({
+      number: idx+1,
+      id: r.part.id,
+      name: r.part.name,
+      count: sprintf.sprintf('%.2f', r.count),
+      price: sprintf.sprintf('%.2f', r.price),
+      priceGross: sprintf.sprintf('%.2f', r.price + tax),
+      taxRate: '23.00',
+      unit: 'szt.',
+      amount: sprintf.sprintf('%.2f', r.price * r.count),
+      amountTax: sprintf.sprintf('%.2f', tax * r.count),
+    })
+  }
+  res.set('Content-Type', 'application/xml')
+  res.render('order_export', {
+    title: 'kosztorysy',
+    records: records,
+  })
+}
+
 app.get('/order/print/:created/:updated', function(req, res) {
   var orderKey = 'order_data/' + req.params.created + '/start/' + req.params.updated
   db.get(orderKey, {
     valueEncoding: 'json'
   }, function(err, data) {
+    if (err) return res.json({
+      err: err.toString()
+    })
     console.log(data, typeof(data))
     printOrder(req, res, data)
   })
 })
 
+app.get('/order/export/:created/:updated', function(req, res) {
+  var orderKey = 'order_data/' + req.params.created + '/start/' + req.params.updated
+  db.get(orderKey, {
+    valueEncoding: 'json'
+  }, function(err, data) {
+    if (err) return res.json({
+      err: err.toString()
+    })
+    exportOrder(req, res, data)
+  })
+})
+
 app.post('/order/print', function(req, res) {
   printOrder(req, res, req.body)
+})
+
+app.post('/order/export', function(req, res) {
+  exportOrder(req, res, req.body)
+})
+
+app.post('/order/export2', function(req, res){
+  res.set('Content-disposition', 'attachment; filename='+req.body.fileName)
+  var order = JSON.parse(req.body.order)
+  exportOrder(req, res, order)
 })
 
 app.get('/part/find/:id', function(req, res) {

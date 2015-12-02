@@ -339,4 +339,45 @@ $(document).ready(function() {
       printOrder(readPanel('#parts_panel'))
     }
   })
+
+  $('#order_export_button').click(function(evt) {
+    evt.preventDefault()
+    if ($('#parts_panel').data('created')) {
+      var order = readPanel('#parts_panel')
+      if (false) {
+        $('<form>').appendTo($('#order_export_iframe').contents().find('body'))
+          .attr('method', 'POST').attr('action', 'order/export2')
+          .append($('<input>', {
+            type: 'hidden',
+            name: 'order',
+            value: JSON.stringify(order)
+          }))
+          .append($('<input>', {
+            type: 'hidden',
+            name: 'fileName',
+            value: 'kosztorysy_' + moment().format('YY-MM-DD_HH-mm-ss') + '.xml'
+          }))
+          .submit()
+      } else {
+        $.ajax({
+          type: 'POST',
+          url: 'order/print',
+          data: JSON.stringify(order),
+          contentType: 'application/json; charset=utf-8',
+          dataType: 'text',
+          success: function(data) {
+            var e = document.createEvent('MouseEvent')
+            e.initEvent('click', true, true)
+            $('#order_export_link')
+              .attr('href', 'data:application/xml;charset=utf-8,' + encodeURIComponent(data))
+              .attr('download', 'kosztorysy_' + moment().format('YY-MM-DD_HH-mm-ss') + '.xml')[0].dispatchEvent(e)
+          },
+          error: function(req, status, errMsg) {
+            showError(errMsg)
+            console.log('resp err', errMsg)
+          }
+        })
+      }
+    }
+  })
 })

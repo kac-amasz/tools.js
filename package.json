@@ -33,6 +33,7 @@
     "mustache": "^2.2.0",
     "nodemailer": "^1.10.0",
     "reload": "^0.7.0",
+    "sprintf-js": "^1.0.3",
     "tar": "^2.2.1"
   }
 }

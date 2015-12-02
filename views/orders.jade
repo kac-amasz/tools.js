@@ -23,6 +23,9 @@ html
                   input#search_text.form-control(type='text',placeholder='np. 220')
                   button#search_commit.btn.btn-default dodaj
             .navbar-right
+              button#order_export_button.btn.btn-default.navbar-btn export
+              iframe#order_export_iframe(style= 'display: none')
+              a#order_export_link
               button#order_print_button.btn.btn-default.navbar-btn drukuj
       .notifications.top-left
       #parts_panel.parts_panel.panel.panel-warning(style='display: none')

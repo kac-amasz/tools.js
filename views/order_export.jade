@@ -1,0 +1,59 @@
+doctype xml
+Document-Invoice
+  Invoice-Lines
+   each rec in records
+    Line
+      Line-Item
+        LineNumber!= rec.number
+        LineType T
+        EAN
+        BuyerItemCode!= rec.id
+        SupplierItemCode!= rec.id
+        ItemDescription!= rec.name
+        InvoiceQuantity!= rec.count
+        UnitOfMeasure!= rec.unit
+        InvoiceUnitNetPrice!= rec.price
+        InvoiceUnitGrossPrice!= rec.priceGross
+        TaxRate!= rec.taxRate
+        TaxCategoryCode S
+        TaxAmount!= rec.amountTax
+        NetAmount!= rec.amount
+        Rebate 0.00
+        InvoiceUnitNetPriceBeforeRebate 265.51
+        InvoiceUnitGrossPriceBeforeRebate 326.58
+        FreeUnit 0
+        FreeInvoiceUnitNetPrice 0.00
+        FreeInvoiceUnitGrossPrice 0.00
+        FreeTaxAmount 0.00
+        FreeNetAmount 0.00
+        FreeInvoiceUnitNetPriceBeforeRebate 0.00
+        FreeInvoiceUnitGrossPriceBeforeRebate 0.00
+
+   - var showExample = false
+   if showExample
+    Line
+      Line-Item
+        LineNumber 2
+        LineType T
+        EAN
+        BuyerItemCode 0000000666
+        SupplierItemCode 0000000666
+        ItemDescription SRALNIK
+        InvoiceQuantity 1.00
+        UnitOfMeasure szt.
+        InvoiceUnitNetPrice 265.51
+        InvoiceUnitGrossPrice 326.58
+        TaxRate 23.00
+        TaxCategoryCode S
+        TaxAmount 61.07
+        NetAmount 265.51
+        Rebate 0.00
+        InvoiceUnitNetPriceBeforeRebate 265.51
+        InvoiceUnitGrossPriceBeforeRebate 326.58
+        FreeUnit 0
+        FreeInvoiceUnitNetPrice 0.00
+        FreeInvoiceUnitGrossPrice 0.00
+        FreeTaxAmount 0.00
+        FreeNetAmount 0.00
+        FreeInvoiceUnitNetPriceBeforeRebate 0.00
+        FreeInvoiceUnitGrossPriceBeforeRebate 0.00
