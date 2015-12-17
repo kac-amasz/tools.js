@@ -7,7 +7,7 @@ var express = require('express'),
   levelup = require('level'),
   sprintf = require('sprintf-js')
 
-var conf = require('./env.json')[process.env.NODE_ENV || 'prod']
+var conf = require(process.argv[3])[process.env.NODE_ENV || 'prod']
 console.log(conf)
 var db = levelup(process.argv[2])
 var app = express()
@@ -48,19 +48,29 @@ function rowToPart(row) {
   }
 }
 
-app.get('/part/:id', function(req, res) {
-  var id = req.params.id.toUpperCase()
-    //if (!/^A-Z/.test(id)) id = zeroFill(id, 10)
+function getPart(id, callback) {
   id = zeroFill(id, 10)
   db.get('c' + id, {
     valueEncoding: 'json'
-  }, function(err, value) {
+  }, function(err, row) {
+    callback(err, row ? rowToPart(row) : undefined)
+  })
+}
+
+app.get('/part/:id', function(req, res) {
+  var id = req.params.id.toUpperCase()
+    //if (!/^A-Z/.test(id)) id = zeroFill(id, 10)
+  getPart(id, function(err, part) {
     res.json({
       err: err ? err.toString() : undefined,
-      value: value ? rowToPart(value) : undefined
+      value: part ? part : undefined
     })
   })
 })
+
+app.getPart = getPart
+
+app.use('/faktir', require('./faktir_webapp').setConfig(conf.faktir))
 
 function saveOrder(order, callback) {
   var latestKey = 'order_latest/' + order.created
