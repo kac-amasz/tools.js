@@ -5,10 +5,9 @@ var express = require('express'),
   streamBuffers = require('stream-buffers'),
   Mustache = require('mustache'),
   async = require('async'),
-  faktir_solver = require('./faktir_solver')
-
-
-var useReload = true
+  faktir_solver = require('./faktir_solver'),
+  logger = require('morgan'),
+  bodyParser = require('body-parser')
 
 var app = express()
 app.set('view engine', 'jade')
@@ -19,10 +18,12 @@ app.use(function(req, res, next) {
     //  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
   next()
 })
+app.use(logger('dev'))
+app.use(bodyParser.text({limit: '10mb'}))
 
 app.get('/', function(req, res) {
   res.render('faktir_test', {
-    useReload: useReload
+    useReload: typeof(config.useReload) !== 'undefined' ? config.useReload : false
   })
 })
 
@@ -81,7 +82,10 @@ app.post('/process/:type', function(req, res) {
     subApp = subAppCache[type]
   }
   if (subApp) {
-    subApp(req, true, function(err, invoice) {
+    var rstream = new streamBuffers.ReadableStreamBuffer()
+    rstream.put(new Buffer(req.body, 'hex'))
+    rstream.stop()
+    subApp(rstream, true, function(err, invoice) {
       if (err) return res.json({
         err: err.toString()
       })
