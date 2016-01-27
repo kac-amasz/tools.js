@@ -8,42 +8,27 @@ var sql = require('mssql'),
 var conf = process.argv.length > 2 ? require(process.argv[2]) : require('./config').backup.db,
   years = process.argv.length > 3 ? parseInt(process.argv[3]) : 2
 
-var qPrzych = 'SELECT SUM(ilosc) AS ilosc, DATEDIFF(DD, MAX(dm.dataOperacji), GETDATE()) AS dni'
-  //
-  + ' FROM TowaryDokumentowMagazynowych tdm'
-  //
-  + ' INNER JOIN DokumentyMagazynowe dm ON tdm.idDokumentyMagazynowe = dm.id'
-  //
-  + ' LEFT OUTER JOIN Towary ON Towary.id = tdm.idTowary'
-  //
-  + ' WHERE dm.anulowany = 0 AND dm.korygowany = 0 AND dm.przychodowy = 1'
-  //
-  + ' AND dm.dataOperacji >= DATEADD(Month, -{{years}} * 12, GETDATE())'
-  //
-  + ' AND tdm.idTowary = {{id}} AND dm.typ <> \'RI+\''
+var qPrzych = 'SELECT SUM(ilosc) AS ilosc, DATEDIFF(DD, MAX(dm.dataOperacji), GETDATE()) AS dni' +
+  ' FROM TowaryDokumentowMagazynowych tdm' +
+  ' INNER JOIN DokumentyMagazynowe dm ON tdm.idDokumentyMagazynowe = dm.id' +
+  ' LEFT OUTER JOIN Towary ON Towary.id = tdm.idTowary' +
+  ' WHERE dm.anulowany = 0 AND dm.korygowany = 0 AND dm.przychodowy = 1' +
+  ' AND dm.dataOperacji >= DATEADD(Month, -{{years}} * 12, GETDATE())' +
+  ' AND tdm.idTowary = {{id}} AND dm.typ <> \'RI+\''
 
-var qRozch = 'SELECT SUM(ilosc) AS ilosc'
-  //
-  + ' FROM TowaryDokumentowMagazynowych tdm'
-  //
-  + ' INNER JOIN DokumentyMagazynowe dm ON tdm.idDokumentyMagazynowe = dm.id'
-  //
-  + ' LEFT OUTER JOIN Towary ON Towary.id = tdm.idTowary'
-  //
-  + ' WHERE dm.anulowany = 0 AND dm.korygowany = 0 AND dm.rozchodowy = 1'
-  //
-  + ' AND dm.dataOperacji >= DATEADD(Month, -{{years}} * 12, GETDATE())'
-  //
-  + ' AND tdm.idTowary = {{id}} AND dm.typ <> \'RI-\''
+var qRozch = 'SELECT SUM(ilosc) AS ilosc' +
+  ' FROM TowaryDokumentowMagazynowych tdm' +
+  ' INNER JOIN DokumentyMagazynowe dm ON tdm.idDokumentyMagazynowe = dm.id' +
+  ' LEFT OUTER JOIN Towary ON Towary.id = tdm.idTowary' +
+  ' WHERE dm.anulowany = 0 AND dm.korygowany = 0 AND dm.rozchodowy = 1' +
+  ' AND dm.dataOperacji >= DATEADD(Month, -{{years}} * 12, GETDATE())' +
+  ' AND tdm.idTowary = {{id}} AND dm.typ <> \'RI-\''
 
 
-var qStany = 'SELECT Towary.id, MAX(nrKatalogowy) AS nrKatalogowy'
-  //
-  + ' , SUM(stan) AS stan, MAX(nazwa) AS nazwa, MAX(bazowaCenaZakupuNetto) AS cena'
-  //
-  + ' FROM dbo.StanyMagazynowe LEFT JOIN dbo.Towary ON idTowary = dbo.Towary.id'
-  //
-  + ' WHERE stan > 0 GROUP BY Towary.id'
+var qStany = 'SELECT Towary.id, MAX(nrKatalogowy) AS nrKatalogowy' +
+  ' , SUM(stan) AS stan, MAX(nazwa) AS nazwa, MAX(bazowaCenaZakupuNetto) AS cena' +
+  ' FROM dbo.StanyMagazynowe LEFT JOIN dbo.Towary ON idTowary = dbo.Towary.id' +
+  ' WHERE stan > 0 GROUP BY Towary.id'
 
 
 var connection = new sql.Connection(conf, function(err) {

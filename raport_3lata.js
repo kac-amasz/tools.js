@@ -1,6 +1,24 @@
-var m_q1 = "SELECT MAX(NazwaTowaru) AS Nazwa, NrKatalogowyTowaru as NrKatalogowy, SUM(Stan) AS Stan" + " FROM Fn_raport_magazynowy_stany('{{timestamp}}')" + " WHERE idmagazyny = {{warehouseId}} GROUP BY NrKatalogowyTowaru HAVING SUM(Stan) > 0 ORDER BY Nazwa"
+var m_q1 = "SELECT MAX(NazwaTowaru) AS Nazwa, NrKatalogowyTowaru as NrKatalogowy, SUM(Stan) AS Stan" +
+  " FROM Fn_raport_magazynowy_stany('{{timestamp}}')" +
+  " WHERE idmagazyny = {{warehouseId}} GROUP BY NrKatalogowyTowaru HAVING SUM(Stan) > 0 ORDER BY Nazwa"
   // warehouseId, dateFrom(2015-10-31T23:59:59.000), dateTo
-var m_q2 = "SELECT RM.NazwaTowaru AS Nazwa, RM.NrKatalogowyTowaru AS NrKatalogowy, COALESCE(Max(przych_rozch.rozchod), 0) AS rozch_ilosc" + " FROM  raport_magazynowy AS RM" + " LEFT JOIN (SELECT idmagazyny , IdTowary , Sum(przychod) AS przychod" + ", dbo.Fn_zaokr(Sum(przychodnetto)) AS przychodNetto, Sum(rozchod) AS rozchod" + ", dbo.Fn_zaokr(Sum(rozchodnetto))  AS rozchodNetto" + " FROM raport_magazynowy WHERE data BETWEEN '{{dateFrom}}' AND '{{dateTo}}'" + " AND idmagazyny = 3 GROUP BY idmagazyny, IdTowary)" + " AS przych_rozch ON ((przych_rozch.idmagazyny = RM.idmagazyny )" + " OR ( przych_rozch.idmagazyny IS NULL AND RM.idmagazyny IS NULL ) )" + " AND ( ( przych_rozch.IdTowary = RM.IdTowary )" + " OR ( przych_rozch.IdTowary IS NULL AND RM.IdTowary IS NULL ) )" + " WHERE data BETWEEN '{{dateFrom}}' AND '{{dateTo}}'" + " AND (RM.typDM IN ('WZ', 'WZK', 'RW', 'RWK', 'MM-', 'RI-', 'KK'))" + " GROUP BY RM.IdMagazyny, RM.nazwamagazynu,RM.NazwaTowaru, RM.NrKatalogowyTowaru" + " HAVING ( COALESCE(Max(przych_rozch.rozchod), 0) <> 0" + " OR COALESCE(Max(przych_rozch.rozchodnetto), 0) <> 0 )" + " ORDER  BY RM.nazwamagazynu , RM.NazwaTowaru"
+var m_q2 = "SELECT RM.NazwaTowaru AS Nazwa, RM.NrKatalogowyTowaru AS NrKatalogowy, COALESCE(Max(przych_rozch.rozchod), 0) AS rozch_ilosc" +
+  " FROM  raport_magazynowy AS RM" +
+  " LEFT JOIN (SELECT idmagazyny , IdTowary , Sum(przychod) AS przychod" +
+  ", dbo.Fn_zaokr(Sum(przychodnetto)) AS przychodNetto, Sum(rozchod) AS rozchod" +
+  ", dbo.Fn_zaokr(Sum(rozchodnetto))  AS rozchodNetto" +
+  " FROM raport_magazynowy WHERE data BETWEEN '{{dateFrom}}' AND '{{dateTo}}'" +
+  " AND idmagazyny = 3 GROUP BY idmagazyny, IdTowary)" +
+  " AS przych_rozch ON ((przych_rozch.idmagazyny = RM.idmagazyny )" +
+  " OR ( przych_rozch.idmagazyny IS NULL AND RM.idmagazyny IS NULL ) )" +
+  " AND ( ( przych_rozch.IdTowary = RM.IdTowary )" +
+  " OR ( przych_rozch.IdTowary IS NULL AND RM.IdTowary IS NULL ) )" +
+  " WHERE data BETWEEN '{{dateFrom}}' AND '{{dateTo}}'" +
+  " AND (RM.typDM IN ('WZ', 'WZK', 'RW', 'RWK', 'MM-', 'RI-', 'KK'))" +
+  " GROUP BY RM.IdMagazyny, RM.nazwamagazynu,RM.NazwaTowaru, RM.NrKatalogowyTowaru" +
+  " HAVING ( COALESCE(Max(przych_rozch.rozchod), 0) <> 0" +
+  " OR COALESCE(Max(przych_rozch.rozchodnetto), 0) <> 0 )" +
+  " ORDER  BY RM.nazwamagazynu , RM.NazwaTowaru"
 
 var sql = require('mssql')
 var Mustache = require('mustache')

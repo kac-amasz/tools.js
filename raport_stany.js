@@ -9,7 +9,10 @@ var async = require('async')
 var common = require('./common')
 var conf = process.argv.length > 2 ? require(process.argv[2]) : require('./config')
 
-var m_q1 = 'SELECT nrKatalogowy, SUM(stan) as stan, MAX(nazwa) as nazwa FROM dbo.StanyMagazynowe LEFT JOIN dbo.Towary ON idTowary = dbo.Towary.id WHERE idMagazyny = {{warehouseId}} AND stan > 0 GROUP BY nrKatalogowy ORDER BY nrKatalogowy'
+var m_q1 = 'SELECT nrKatalogowy, SUM(stan) as stan, MAX(nazwa) as nazwa FROM dbo.StanyMagazynowe' +
+  ' LEFT JOIN dbo.Towary ON idTowary = dbo.Towary.id' +
+  ' WHERE idMagazyny = {{warehouseId}} AND stan > 0' +
+  ' GROUP BY nrKatalogowy ORDER BY nrKatalogowy'
 
 function getStates(ctx, callback) {
   new sql.Request(ctx.conn).query(Mustache.render(m_q1, {
