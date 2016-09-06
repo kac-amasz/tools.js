@@ -196,7 +196,7 @@ function uploadZip(ctx, callback) {
     Body: fs.createReadStream(ctx.zipFile),
     //ContentType: 'application/zip',
     ContentType: ctx.zipFileContentType,
-    StorageClass: 'STANDARD_IA'
+    StorageClass: 'STANDARD'
   }
   var upload = new AWS.S3.ManagedUpload({
     params: params,
